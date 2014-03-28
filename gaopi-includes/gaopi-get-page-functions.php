@@ -94,4 +94,34 @@ function getPagesList() {
 	
 	$req=$DB->req("SELECT * FROM ".DB_PREFIX."pages ORDER BY home DESC");
 	return $DB->fetchall($req);
+}
+function getLinksList($lang=0) {
+	global $settings, $DB;
+	if(!$lang) {
+		$lang=$settings["language"];
+	}
+	
+	$req=$DB->req("SELECT * FROM ".DB_PREFIX."navbar_links ORDER BY order_in_bar");
+	$links=$DB->fetchall($req);
+	if(count($links)) {
+		for($i=0;$i<count($links);$i++) {
+			$req=$DB->req("SELECT * FROM ".DB_PREFIX."navbar_links_text WHERE link_id=".$links[$i]["id"]." AND language='".$lang."'");
+			if($data=$DB->fetch($req)) {
+				$links[$i]["text"]=$data["text"];
+				$DB->freereq($req);
+			} else {
+				$DB->freereq($req);
+				$req=$DB->req("SELECT * FROM ".DB_PREFIX."navbar_links_text WHERE link_id=".$links[$i]["id"]);
+				if($data=$DB->fetch($req)) {
+					$links[$i]["text"]=$data["text"];
+				} else {
+					$links[$i]["text"]=_t("No title");
+				}
+				$DB->freereq($req);
+			}
+		}
+		return $links;
+	}
+	$DB->freereq($req);
+	return false;
 }

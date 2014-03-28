@@ -244,13 +244,16 @@
 		</div>
 		<div id="navBar">
 			<?php
-				if(setting("displayAllPagesInNavBar")=="yes") {
-					$pageslist=getPagesList();
-					
+				if(setting("displayAllPagesInNavBar")=="yes") {					
 					foreach($pageslist as $currentpage) {
 						echo('<a href="?p='.$currentpage["id"].'">'.getPageTitle($currentpage["id"]).'</a>');
 					}
 					
+				}
+				if($linkslist) {
+					foreach($linkslist as $link) {
+						echo('<a href="'.$link["url"].'">'.$link["text"].'</a>');
+					}
 				}
 				if(setting("allowToHide")=="yes") { ?>
 					<a href="#" onclick="toggleHide(this)" class="toggleLink">&lt;</a>

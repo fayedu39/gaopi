@@ -26,6 +26,8 @@ if(isset($DB)) {
 		while($data=$DB->fetch($req)) {
 			$page["settings"][$data["setting"]]=$data["value"];
 		}
+		$pageslist=getPagesList();
+		$linkslist=getLinksList();
 	} else {
 		$page["title"]=_t("No page");
 		$page["content"]=Array(
